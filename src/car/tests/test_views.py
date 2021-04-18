@@ -28,12 +28,39 @@ class PublicCarAccess(TestCase):
             )
             self.special_id = car.special_id
 
-    def test_get_all_cars(self):
-        response = self.client.get(reverse(self.list))
+    def test_get_all_cars_all_data(self):
+        response = self.client.get(
+            reverse(self.list),
+            {"show_class": True, "show_hybrid_or_electric": True},
+            format="json",
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue("car_class" in response.data["results"][0].keys())
 
-    def test_get_special_car(self):
+    def test_get_all_cars_without_on_demand_data(self):
+        response = self.client.get(
+            reverse(self.list),
+            {"show_class": "", "show_hybrid_or_electric": ""},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse("car_class" in response.data["results"][0].keys())
+
+    def test_get_special_car_all_data(self):
+
+        response = self.client.get(
+            reverse(self.detail, kwargs={"special_id": self.special_id}),
+            {"show_class": True, "show_hybrid_or_electric": True},
+        )
+        from_db = Car.objects.get(special_id=self.special_id)
+        serializer = CarSerializer(from_db)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, serializer.data)
+
+    def test_get_special_car_without_on_demand_data(self):
 
         response = self.client.get(
             reverse(self.detail, kwargs={"special_id": self.special_id})
@@ -42,7 +69,7 @@ class PublicCarAccess(TestCase):
         serializer = CarSerializer(from_db)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        self.assertNotEqual(response.data, serializer.data)
 
     def test_cannot_get_special_car(self):
         response = self.client.get(reverse(self.detail, kwargs={"special_id": "11"}))

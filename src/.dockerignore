@@ -1,13 +1,11 @@
-.flake8
 .gitignore
 Makefile
 README.md
-setup.cfg
 docker-compose.yml
 Dockerfile
 .env
 .coverage
-.venv/
+.venv/*
 celerybeat-schedule
 
 # Static and Media files

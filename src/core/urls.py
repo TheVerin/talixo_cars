@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny
 
 
 schema_view = get_schema_view(
-    openapi.Info(title="Taxlio", default_version="v1"),
+    openapi.Info(title="Taxlio Car API", default_version="v1"),
     public=True,
     permission_classes=(AllowAny,),
 )
@@ -18,6 +18,7 @@ schema_view = get_schema_view(
 urlpatterns = (
     [
         path("admin/", admin.site.urls),
+        path("v1/", include("core.v1_urls")),
     ]
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

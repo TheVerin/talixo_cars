@@ -31,8 +31,8 @@ HTTPS -> https://github.com/TheVerin/talixo_cars.git
 
 Great
 
-Now you can choose to run app in dev environment.
 
+Now you can choose to run app in dev environment.
 
 At first you have to create .env file witch all variables from .env.example file (you just can
 change its name). After that run terminal from project root and then execute command:
@@ -43,12 +43,19 @@ change its name). After that run terminal from project root and then execute com
 Really easy, right?
 
 
+To get docs of the app you should visit:
+/docs/
+
+
 Last point is testing.
-
-
 It is as simple as running the app. You need to run terminal from project root and:
 
     make test
+
+
+If you want to remove app containers run command:
+
+    make remove
 
 
 That's all

@@ -1,4 +1,6 @@
 from django.utils.datastructures import MultiValueDictKeyError
+from drf_yasg.openapi import Parameter, IN_QUERY
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -11,6 +13,22 @@ class CarViewSet(ModelViewSet):
     serializer_class = CarSerializer
     lookup_field = "special_id"
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            Parameter(
+                "show_class",
+                IN_QUERY,
+                type="str",
+                description="Set True to get full data",
+            ),
+            Parameter(
+                "show_hybrid_or_electric",
+                IN_QUERY,
+                type="str",
+                description="Set True to get full data",
+            ),
+        ]
+    )
     def list(self, request, *args, **kwargs) -> Response:
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -26,6 +44,22 @@ class CarViewSet(ModelViewSet):
             ]
             return self.get_paginated_response(updated_data)
 
+    @swagger_auto_schema(
+        manual_parameters=[
+            Parameter(
+                "show_class",
+                IN_QUERY,
+                type="str",
+                description="Set True to get full data",
+            ),
+            Parameter(
+                "show_hybrid_or_electric",
+                IN_QUERY,
+                type="str",
+                description="Set True to get full data",
+            ),
+        ]
+    )
     def retrieve(self, request, *args, **kwargs) -> Response:
         instance = self.get_object()
         serializer = self.get_serializer(instance)
@@ -37,9 +71,9 @@ class CarViewSet(ModelViewSet):
 
     def _remove_fields(self, serializer, request):
         try:
-            if not bool(request.query_params["show_class"]):
+            if request.query_params["show_class"] != "True":
                 serializer.pop("car_class")
-            if not bool(request.query_params["show_hybrid_or_electric"]):
+            if request.query_params["show_hybrid_or_electric"] != "True":
                 serializer.pop("hybrid_or_electric")
             return serializer
         except MultiValueDictKeyError:

@@ -31,7 +31,7 @@ class PublicCarAccess(TestCase):
     def test_get_all_cars_all_data(self):
         response = self.client.get(
             reverse(self.list),
-            {"show_class": True, "show_hybrid_or_electric": True},
+            {"show_class": "True", "show_hybrid_or_electric": "True"},
             format="json",
         )
 
@@ -52,7 +52,7 @@ class PublicCarAccess(TestCase):
 
         response = self.client.get(
             reverse(self.detail, kwargs={"special_id": self.special_id}),
-            {"show_class": True, "show_hybrid_or_electric": True},
+            {"show_class": "True", "show_hybrid_or_electric": "True"},
         )
         from_db = Car.objects.get(special_id=self.special_id)
         serializer = CarSerializer(from_db)

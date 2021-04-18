@@ -5,4 +5,4 @@ exclude =
     */migrations,
     __pycache__,
     src/manage.py,
-    src/core/settings/*
+    src/core/settings.py

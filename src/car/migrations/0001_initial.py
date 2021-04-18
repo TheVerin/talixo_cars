@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                     "special_id",
                     models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
                 ),
-                ("registration", models.CharField(blank=True, max_length=10)),
+                ("registration_number", models.CharField(blank=True, max_length=10)),
                 ("max_passengers", models.PositiveSmallIntegerField(blank=True)),
                 ("production_year", models.PositiveSmallIntegerField(blank=True)),
                 ("brand", models.CharField(max_length=20)),
@@ -37,7 +37,11 @@ class Migration(migrations.Migration):
                     "car_class",
                     models.CharField(
                         blank=True,
-                        choices=[("E", "ECONOMICS"), ("B", "BUSINESS"), ("F", "FIRST")],
+                        choices=[
+                            ("ECONOMIC", "ECONOMIC"),
+                            ("BUSINESS", "BUSINESS"),
+                            ("FIRST", "FIRST"),
+                        ],
                         max_length=20,
                     ),
                 ),

@@ -1,8 +1,14 @@
 [flake8]
-max-line-length = 120
+max-line-length = 100
 exclude =
-    .venv/,
+    .venv/*,
     */migrations,
     __pycache__,
-    src/manage.py,
-    src/core/settings/*
+    manage.py,
+    core/settings.py
+   ./media/*
+   ./static/*
+   .dockerignore
+   Dockerfile
+   requirements.txt
+   start.sh

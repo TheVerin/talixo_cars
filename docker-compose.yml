@@ -24,6 +24,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      - ./src:/src
       - static:/src/static
       - media:/src/media
     command: sh /src/start.sh

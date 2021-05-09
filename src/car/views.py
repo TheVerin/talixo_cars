@@ -1,5 +1,6 @@
 from django.utils.datastructures import MultiValueDictKeyError
-from drf_yasg.openapi import Parameter, IN_QUERY
+
+from drf_yasg.openapi import IN_QUERY, Parameter
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet

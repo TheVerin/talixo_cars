@@ -31,8 +31,11 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.staticfiles",
     # third party
+    "csvexport",
     "drf_yasg",
     "rest_framework",
+    # project apps
+    "car",
 ]
 
 SITE_ID = 1
@@ -49,6 +52,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
 
 TEMPLATES = [
     {

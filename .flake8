@@ -1,8 +1,0 @@
-[flake8]
-max-line-length = 120
-exclude =
-    .venv/,
-    */migrations,
-    __pycache__,
-    src/manage.py,
-    src/core/settings/*

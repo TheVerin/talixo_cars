@@ -1,12 +1,13 @@
 import uuid
 
 from django.db.models import (
+    BooleanField,
     CharField,
     Model,
     PositiveSmallIntegerField,
-    BooleanField,
     UUIDField,
 )
+
 
 CLASSES = [
     ("ECONOMIC", "ECONOMIC"),

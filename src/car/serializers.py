@@ -1,6 +1,4 @@
-from rest_framework.serializers import (
-    ModelSerializer,
-)
+from rest_framework.serializers import ModelSerializer
 
 from car.models import Car
 

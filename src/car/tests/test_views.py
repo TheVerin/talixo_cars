@@ -10,8 +10,7 @@ from car.serializers import CarSerializer
 
 class PublicCarAccess(TestCase):
     def setUp(self) -> None:
-        self.list = "car-list"
-        self.detail = "car-detail"
+        self.endpoint_name = "car"
 
         self.client = APIClient()
 
@@ -30,7 +29,7 @@ class PublicCarAccess(TestCase):
 
     def test_get_all_cars_all_data(self):
         response = self.client.get(
-            reverse(self.list),
+            reverse(self.endpoint_name),
             {"show_class": "True", "show_hybrid_or_electric": "True"},
             format="json",
         )
@@ -40,7 +39,7 @@ class PublicCarAccess(TestCase):
 
     def test_get_all_cars_without_on_demand_data(self):
         response = self.client.get(
-            reverse(self.list),
+            reverse(self.endpoint_name),
             {"show_class": "", "show_hybrid_or_electric": ""},
             format="json",
         )
@@ -51,8 +50,12 @@ class PublicCarAccess(TestCase):
     def test_get_special_car_all_data(self):
 
         response = self.client.get(
-            reverse(self.detail, kwargs={"special_id": self.special_id}),
-            {"show_class": "True", "show_hybrid_or_electric": "True"},
+            reverse(self.endpoint_name),
+            {
+                "id": self.special_id,
+                "show_class": "True",
+                "show_hybrid_or_electric": "True",
+            },
         )
         from_db = Car.objects.get(special_id=self.special_id)
         serializer = CarSerializer(from_db)
@@ -62,9 +65,7 @@ class PublicCarAccess(TestCase):
 
     def test_get_special_car_without_on_demand_data(self):
 
-        response = self.client.get(
-            reverse(self.detail, kwargs={"special_id": self.special_id})
-        )
+        response = self.client.get(reverse(self.endpoint_name), {"id": self.special_id})
         from_db = Car.objects.get(special_id=self.special_id)
         serializer = CarSerializer(from_db)
 
@@ -72,7 +73,7 @@ class PublicCarAccess(TestCase):
         self.assertNotEqual(response.data, serializer.data)
 
     def test_cannot_get_special_car(self):
-        response = self.client.get(reverse(self.detail, kwargs={"special_id": "11"}))
+        response = self.client.get(reverse(self.endpoint_name), {"id": "11"})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -88,7 +89,7 @@ class PublicCarAccess(TestCase):
             "hybrid_or_electric": True,
         }
 
-        response = self.client.post(reverse(self.list), payload, format="json")
+        response = self.client.post(reverse(self.endpoint_name), payload, format="json")
 
         from_db = Car.objects.latest("pk")
         serializer = CarSerializer(from_db)
@@ -111,12 +112,37 @@ class PublicCarAccess(TestCase):
             "hybrid_or_electric": True,
         }
 
-        response = self.client.post(reverse(self.list), payload, format="json")
+        response = self.client.post(reverse(self.endpoint_name), payload, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete(self):
-        response = self.client.delete(
-            reverse(self.detail, kwargs={"special_id": self.special_id})
-        )
+        response = self.client.delete(f"/v1/car/?id={self.special_id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_update(self):
+        payload = {
+            "registration_number": "AAA 1000",
+            "max_passengers": 5,
+            "production_year": 2010,
+            "brand": "Brand",
+            "model": "Model",
+            "type": "Sedan",
+            "car_class": "ECONOMIC",
+            "hybrid_or_electric": True,
+        }
+        response = self.client.put(
+            f"/v1/car/?id={self.special_id}", payload, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_partial_update(self):
+        payload = {
+            "registration_number": "AAA 1011",
+            "max_passengers": 5,
+            "production_year": 2010,
+        }
+        response = self.client.patch(
+            f"/v1/car/?id={self.special_id}", payload, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

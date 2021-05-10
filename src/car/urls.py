@@ -1,8 +1,8 @@
-from rest_framework.routers import SimpleRouter
+from django.urls import path
 
-from car.views import CarViewSet
+from car.views import car_views
 
 
-router = SimpleRouter()
-router.register("", CarViewSet, basename="car")
-urlpatterns = router.urls
+urlpatterns = [
+    path("", car_views, name="car"),
+]
